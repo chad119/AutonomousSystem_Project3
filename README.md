@@ -1,2 +1,21 @@
-# AutonomousSystem_Project3
-University of California, Irvine
+# AutonomousSystem_Project3 @ University of California, Irvine
+This projects has three parts:
+  - Part 1 : PID Controllers  
+    - In this problem, I use TurtleBot3 simulator to tune a PID controller. In workspace, create a new node named **PID_Controller**. This node shall subscribe to the following topics:
+      - **/reference_point** : this topic contains information about the new pose (x,y,theta) that the robotshall visit. It also contains another parameter called “mode”.
+      - **/slam_pose** : this topic contains information about the current robot position as estimated by the Hector SLAM algorithm.  
+    - This node shall publish to the topic:
+      - **/cmd_vel** : which is used to assign linear and angularvelocities. The node shall implement the PID controller to move the robot from its current pose to the reference pose. In particular, it should implementtwo PID controllers, one that controls the angular motion, while the other one controls the linearmotion.
+    - Whenever the “mode” is set to zero, then the **PID_Controller** shall activate the PID for the angular velocity first until the robot faces the reference point, followed by activating the linearvelocity controller until the robot gets to the reference point, and finally activate the angular velocity controller again to turn the robot towards the final angle. Whenever the “mode” is set to 1, then the **PID_Controller** shall activate both the angular and the linear controller simultaneously trying to control both the angle and the position of the robot to get to the final pose.You need to pick different combinations of the **P**, **I**, and **D** for the angular velocity controller and the linear controller. You need to try different values until you get an acceptable result.
+  - Part 2 : Path Planning Using RRT
+    - In this problem, I implement the RRT algorithm for path planning. In workspace, create a new ROS node named **RRT_node**. This node should subscribe to the following topics:
+      - **/map** : this topic is used to publish the current occupancy grid computed by the Hector SLAM
+      - **/slam_pose** : this topic contains information about the current robot position as estimated by the Hector SLAM algorithm.
+      - **/target_pose** : this topic is used by the user to specify the target point for which the robot should visit.
+    - And publishes to the following topic:
+      - **/trajectory** : this topic should contain the trajectory (an array of points) that needs to be visitedby the robot in order to move from its current position to the target point.  
+    - This node shall implement the RRT algorithm (assume that the robot is a circle of width = 0.5 meters). The RRT algorithm computes a tree data structure with its root is set to the current robot pose. It then expands the tree by adding more nodes to it. To structure your code, you should implement the following functions that are needed for RRT algorithm to work:
+      1. **Random_configuration**: this function generates a new random configuration in the configuration space. The configuration space is 2-dimensional. So this function is going to generate a random (x,y) point
+      2. **Nearest_vertex**: this function takes as input the randomly generated configuration. It shall go through all the nodes in the tree and compute the euclidean distance with respect to the randomly generated configuration. The function should return the nearest node in the tree.
+      3. **New_configuration**: this function takes as input the randomly generated configuration along with its nearest node in the tree. If the Euclidean distance between the two issmaller than a certain threshold, then this functionshould return the randomly generated configuration. If not, then it should compute the nearest point to the randomly generated configuration whose Euclidean distance is less than the threshold.
+      4. **Add_vertex**: this function should add the node computed by the “New_configuration” to the tree.RRT algorithm shall use the four functions above to add nodes to the tree until add a node that is “close” to the target pose (i.e., the Euclidean distance between one of the nodes in thetree and the target pose is less than the threshold) or reach a max number of iterations. Finally, RRT algorithm should find the trajectory between the root and the target. This can be done by starting from the target node in the tree and go up in the tree until get to the root.
