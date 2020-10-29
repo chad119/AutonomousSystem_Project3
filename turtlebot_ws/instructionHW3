@@ -1,0 +1,66 @@
+Ching-hung Chiang HW3 Instruction
+***************************************
+Problem1:PID controller
+1. >> cd ~/turtlebot_ws
+2. >> catkin_make
+3. >> cd ~/turtlebot_ws/devel
+4. >> source setup.bash
+5. >> cd ~/turtlebot_ws
+6. >> roslaunch turtlebot3_gazebo turtlebot3_world.launch
+(OR YOU WANT TO SEE ANOTHER MAP)
+7. >> roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=hector
+8. >> rostopic pub -r 1 /reference_point motion_plan/reference_point '{x: (x position float),y:  (y position float),theta: (degree),mode: (0 or 1)}' 
+(ENTER YOUR TARGET AND MODE)
+9. >> rosrun motion_plan pid_controller.py
+10. IF YOU SEE THE INFORMATION ON THE TERMINAL IS "wait" YOU CAN PUBLISH ANOTHER POINT
+(P.S. It need some correction in mode 0 so it might take time when you arrive the target. It will try to minimize the error so the robot will keep find the best position)
+---------------------------------------
+Problem2 RRT algorithm:
+
+Terminal:
+1. >> cd ~/turtlebot_ws
+2. >> catkin_make
+3. >> cd ~/turtlebot_ws/devel
+4. >> source setup.bash
+5. >> cd ~/turtlebot_ws
+6. >> roslaunch turtlebot3_gazebo turtlebot3_stage_4.launch
+(OR YOU WANT TO SEE ANOTHER MAP)
+7. >> rosrun map_server map_server map.yaml
+8. >> rostopic pub -r 1 /target_pose motion_plan/reference_point '{x: (x position float),y:  (y position float),theta: (degree),mode: (0 or 1)}' 
+(ENTER YOUR TARGET AND MODE)
+9. >> roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=hector
+10. >> rosrun motion_plan rrt.py
+11. >> rostopic echo trajectory
+(YOU CAN SEE THE RESULT WILL BE A LIST. THIS LIST IS THE TRAJECTORY CREATED BY RRT ALGORITHM )
+...........................................
+Problem3 Path_Planner:
+
+TEST VERSION:
+1. >> cd ~/turtlebot_ws
+2. >> catkin_make
+3. >> cd ~/turtlebot_ws/devel
+4. >> source setup.bash
+5. >> cd ~/turtlebot_ws
+6. >> roslaunch turtlebot3_gazebo turtlebot3_stage_4.launch
+(OR YOU WANT TO SEE ANOTHER MAP)
+7. >> roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=hector
+8. >> rostopic pub -r 1 /trajeory std_msgs/Float64MultiArray '{data: [0.0,1.0,0.5,1.0]<--(YOUR IDEAL PATH, AND PLEASE AVOID OBSTACLE)}'
+9. >> rosrun motion_plan pid_controller.py
+10. >> rosrun motion_plan path_planner.py
+#RIGHT NOW YOU CAN SEE THE SIMULATION WITHOUT RRT ALGORITHM PLANNING
+
+FINAL VERSION:
+1. >> cd ~/turtlebot_ws
+2. >> catkin_make
+3. >> cd ~/turtlebot_ws/devel
+4. >> source setup.bash
+5. >> cd ~/turtlebot_ws
+6. >> roslaunch turtlebot3_gazebo turtlebot3_stage_4.launch
+(OR YOU WANT TO SEE ANOTHER MAP)
+7. >> rosrun map_server map_server map.yaml
+8. >> rostopic pub -r 1 /target_pose motion_plan/reference_point '{x: (x position float),y:  (y position float),theta: (degree),mode: (0 or 1)}' 
+(PLEASE USE 0 MODE)
+9. >> roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=hector
+10. >> rosrun motion_plan rrt.py
+11. >> rosrun motion_plan pid_controller.py
+12. >> rosrun motion_plan path_planner.py
