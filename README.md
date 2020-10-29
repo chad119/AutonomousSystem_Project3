@@ -1,13 +1,13 @@
 # AutonomousSystem_Project3 @ University of California, Irvine
 This projects has three parts:
-  - Part 1 : PID Controllers  
+  - **Part 1 : PID Controllers**  
     - In this problem, I use TurtleBot3 simulator to tune a PID controller. In workspace, create a new node named **PID_Controller**. This node shall subscribe to the following topics:
       - **/reference_point** : this topic contains information about the new pose (x,y,theta) that the robotshall visit. It also contains another parameter called “mode”.
       - **/slam_pose** : this topic contains information about the current robot position as estimated by the Hector SLAM algorithm.  
     - This node shall publish to the topic:
       - **/cmd_vel** : which is used to assign linear and angularvelocities. The node shall implement the PID controller to move the robot from its current pose to the reference pose. In particular, it should implementtwo PID controllers, one that controls the angular motion, while the other one controls the linearmotion.
     - Whenever the “mode” is set to zero, then the **PID_Controller** shall activate the PID for the angular velocity first until the robot faces the reference point, followed by activating the linearvelocity controller until the robot gets to the reference point, and finally activate the angular velocity controller again to turn the robot towards the final angle. Whenever the “mode” is set to 1, then the **PID_Controller** shall activate both the angular and the linear controller simultaneously trying to control both the angle and the position of the robot to get to the final pose.You need to pick different combinations of the **P**, **I**, and **D** for the angular velocity controller and the linear controller. You need to try different values until you get an acceptable result.
-  - Part 2 : Path Planning Using RRT
+  - **Part 2 : Path Planning Using RRT**
     - In this problem, I implement the RRT algorithm for path planning. In workspace, create a new ROS node named **RRT_node**. This node should subscribe to the following topics:
       - **/map** : this topic is used to publish the current occupancy grid computed by the Hector SLAM
       - **/slam_pose** : this topic contains information about the current robot position as estimated by the Hector SLAM algorithm.
